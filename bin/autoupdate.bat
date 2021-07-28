@@ -245,8 +245,8 @@ if exist %rdpwrap_new_ini% (
     echo     -^> %rdpwrap_ini_url% 
     echo       -^> %rdpwrap_new_ini%
     echo         -^> %rdpwrap_ini%
-    echo [+] copy %rdpwrap_new_ini% to %rdpwrap_ini%...
-    copy %rdpwrap_new_ini% %rdpwrap_ini%
+    echo [+] copy %rdpwrap_new_ini% to %rdpwrap_ini% and set `SLInitHook.x64=0`...
+    powershell -Command "(gc '%rdpwrap_new_ini%') -replace 'SLInitHook.x64=1', 'SLInitHook.x64=0' | Out-File -encoding ASCII '%rdpwrap_ini%'"
     echo.
 ) else (
     echo [x] ERROR - File %rdpwrap_new_ini% is missing ^^!
