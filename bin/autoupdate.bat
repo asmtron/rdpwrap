@@ -299,7 +299,19 @@ if errorlevel 1 (
     goto :checkversion
 )
 :waitnetwork
-echo [.] Wait for network connection is available...
+echo [-] Network test failed...
+::ask user about proxy
+echo.
+echo [*] If you want to use proxy , please enter the adress here.
+echo [*] e.g.     http://127.0.0.1:12345
+echo [*] If not , just press Enter , we will try it again.
+set /p proxy=
+if defined proxy (
+    echo set proxy successfully : %proxy%
+    goto :checkversion
+) else (
+    echo [*] retrying...
+)
 ping 127.0.0.1 -n 11>nul
 set /a retry_network_check=retry_network_check+1
 :: wait for a maximum of 5 minutes
@@ -315,7 +327,7 @@ echo.
 echo [*] get version info of autoupdate.bat from GitHub...
 echo     -^> %autoupdate_ver_url%
 for /f "tokens=* usebackq" %%a in (
-    `cscript //nologo "%~f0?.wsf" //job:saveWebBinary %autoupdate_ver_url% %autoupdate_ver%`
+    `cscript //nologo "%~f0?.wsf" //job:saveWebBinary %autoupdate_ver_url% %autoupdate_ver% %proxy%`
 ) do (
     set "download_status=%%a"
 )
@@ -334,7 +346,7 @@ echo [+] New version 'v.%autoupdate_online_version%' of autoupdate.bat available
 echo [*] Download new version of autoupdate.bat from GitHub...
 echo     -^> %autoupdate_url%
 for /f "tokens=* usebackq" %%a in (
-    `cscript //nologo "%~f0?.wsf" //job:saveWebBinary %autoupdate_url% %autoupdate_new_bat%`
+    `cscript //nologo "%~f0?.wsf" //job:saveWebBinary %autoupdate_url% %autoupdate_new_bat% %proxy%`
 ) do (
     set "download_status=%%a"
 )
@@ -358,7 +370,7 @@ echo.
 echo [*] Download latest version of rdpwrap.ini from GitHub...
 echo     -^> %rdpwrap_ini_url%
 for /f "tokens=* usebackq" %%a in (
-    `cscript //nologo "%~f0?.wsf" //job:saveWebBinary %rdpwrap_ini_url% %rdpwrap_new_ini%`
+    `cscript //nologo "%~f0?.wsf" //job:saveWebBinary %rdpwrap_ini_url% %rdpwrap_new_ini% %proxy%`
 ) do (
     set "download_status=%%a"
 )
@@ -392,9 +404,9 @@ exit /b
 <package>
   <job id="saveWebBinary"><script language="VBScript">
     Set args = WScript.Arguments
-    WScript.Echo SaveWebBinary(args(0), args(1))
+    WScript.Echo SaveWebBinary(args(0), args(1), args(2))
     Wscript.Quit
-    Function SaveWebBinary(strUrl, strFile) 'As Boolean
+    Function SaveWebBinary(strUrl, strFile, strProxy) 'As Boolean
         Const adTypeBinary = 1
         Const adSaveCreateOverWrite = 2
         Const ForWriting = 2
@@ -407,7 +419,13 @@ exit /b
         If web Is Nothing Then Set web = CreateObject("WinHttp.WinHttpRequest")
         If web Is Nothing Then Set web = CreateObject("MSXML2.ServerXMLHTTP")
         If web Is Nothing Then Set web = CreateObject("Microsoft.XMLHTTP")
-        web.Open "GET", strURL, False
+        
+        ' Set proxy if provided
+        If strProxy <> "" Then
+            web.SetProxy 2, strProxy
+        End If
+        
+        web.Open "GET", strUrl, False
         web.Send
         If Err.Number <> 0 Then
             SaveWebBinary = False
@@ -443,6 +461,7 @@ exit /b
         End If
         SaveWebBinary = True
     End Function
+
   </script></job>
   <job id="getFileVersion"><script language="VBScript">
     Set args = WScript.Arguments
