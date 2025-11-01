@@ -105,24 +105,24 @@ for %%i in (%*) do (
     )
 )
 if not %arg_unknown%==0 (
-        call :header
+    call :header
     call :missing_arg
     goto :eof
 )
 if %arg_help%==1 (
-        call :header
+    call :header
     call :usage_arg
     goto :eof
 )
 if %arg_taskadd%==1 (
-        call :header
+    call :header
     echo [+] add autorun of %autoupdate_bat% on startup in the schedule task.
     schtasks /create /f /sc ONSTART /tn "RDP Wrapper Autoupdate" /tr "cmd.exe /C \"%~dp0autoupdate.bat\" -log" /ru SYSTEM /delay 0000:10
     powershell "$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries; Set-ScheduledTask -TaskName 'RDP Wrapper Autoupdate' -Settings $settings"
     goto :eof
 )
 if %arg_taskremove%==1 (
-        call :header
+    call :header
     echo [-] remove autorun of %autoupdate_bat% on startup in the schedule task^^!
     schtasks /delete /f /tn "RDP Wrapper Autoupdate"
     goto :eof
@@ -791,7 +791,7 @@ exit /b
     WScript.Echo oAutoGen.GenerateTermsrvINIEntries(args(0), args(1), args(2), args(3))
     Set oAutoGen = Nothing
     Wscript.Quit
-     Class AUTOGEN
+    Class AUTOGEN
       Public Function GenerateTermsrvINIEntries(fileVersion, iniPath, termsrvPath, symbolFile)
         'On Error Resume Next
         Dim architecture: architecture = 0
@@ -1323,4 +1323,5 @@ exit /b
     End Class
   </script></job>
 </package>
+
 
