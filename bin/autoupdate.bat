@@ -96,6 +96,7 @@ for %%i in (%*) do (
     if /i "%%i"=="-taskadd"     set arg_taskadd=1     &  set unknown=0  &  set "args=!args! %%i"
     if /i "%%i"=="-taskremove"  set arg_taskremove=1  &  set unknown=0  &  set "args=!args! %%i"
     if /i "%%i"=="-updated"     set arg_updated=1     &  set unknown=0  &  set "args=!args! %%i"
+    if /i '%%i'=='"-updated"'   set arg_updated=1     &  set unknown=0  &  set "args=!args! %%i"
     if /i "%%i"=="-nowaitnet"   set arg_nowaitnet=1   &  set unknown=0  &  set "args=!args! %%i"
     if /i "%%i"=="-help"        set arg_help=1        &  set unknown=0  &  set "args=!args! %%i"
     if /i "%%i"=="-?"           set arg_help=1        &  set unknown=0  &  set "args=!args! %%i"
@@ -1323,6 +1324,7 @@ exit /b
     End Class
   </script></job>
 </package>
+
 
 
 
