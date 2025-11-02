@@ -10,7 +10,7 @@ setlocal EnableDelayedExpansion
 ::  \_||_|\____|\___\___/ \____| ||_/ \____|\_||_|\___\____(_|____/ \_||_|\___)
 ::                             |_|
 ::
-:: Automatic RDP Wrapper installer and updater v.1.4       asmtron (2025-10-23)
+:: Automatic RDP Wrapper installer and updater v.1.4       asmtron (2025-11-02)
 :: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 :: Options:
 ::   -log        = redirect display output to the file autoupdate.log
@@ -1324,6 +1324,7 @@ exit /b
     End Class
   </script></job>
 </package>
+
 
 
 
